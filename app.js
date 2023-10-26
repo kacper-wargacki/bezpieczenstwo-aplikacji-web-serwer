@@ -15,7 +15,7 @@ app.use(cors());
 const config = {
   server: process.env.DB_SERVER,
   database: process.env.DB_NAME,
-  user: process.env.DB_USER,
+  user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   options: {
     trustServerCertificate: true, // only for local development
