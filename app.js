@@ -81,7 +81,7 @@ app.post("/login", async (req, res) => {
     const username = req.body.data.username;
     const password = sha256(req.body.data.password);
     console.log(`Attempting to check database records for user ${username}`);
-    const result = await mssql.query`SELECT * FROM users WHERE username = ${username} AND password = ${password}`;
+    const result = await mssql.query`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
     console.log(`Result of query: ${result.recordset}`);
     const user = result.recordset[0];
     if (!user) {
@@ -105,13 +105,13 @@ app.post("/login", async (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     const username = req.body.username;
-    const result1 = await mssql.query`SELECT * FROM users WHERE username = ${username}`;
+    const result1 = await mssql.query`SELECT * FROM users WHERE username = '${username}'`;
     const userExists = result1.recordset.length > 0;
     if (userExists) {
       res.status(409).json({ message: "User already exists" });
     } else {
       const password = sha256(req.body.password);
-      const result = await mssql.query`INSERT INTO users(username, password) VALUES(${username}, ${password})`;
+      const result = await mssql.query`INSERT INTO users(username, password) VALUES('${username}', '${password}')`;
       res.status(200).json({ result });
     }
   } catch (error) {
