@@ -77,9 +77,12 @@ app.post("/getNotes", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
+    console.log(`Login request for user ${req.body.data.username}`);
     const username = req.body.data.username;
     const password = sha256(req.body.data.password);
+    console.log(`Attempting to check database records for user ${username}`);
     const result = await mssql.query`SELECT * FROM users WHERE username = ${username} AND password = ${password}`;
+    console.log(`Result of query: ${result.recordset}`);
     const user = result.recordset[0];
     if (!user) {
       res.status(404).json({ message: "User does not exist" });
