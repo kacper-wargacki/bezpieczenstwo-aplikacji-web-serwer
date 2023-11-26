@@ -5,6 +5,8 @@ const { sha256 } = require("js-sha256");
 const jwt = require("jsonwebtoken");
 const mssql = require("mssql");
 const cors = require("cors");
+const https = require("https");
+const fs = require("fs");
 
 const app = express();
 const port = 3000;
@@ -119,6 +121,15 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// app.listen(port, () => {
+//   console.log(`Server is running on http://localhost:${port}`);
+// });
+
+const options = {
+  key: fs.readFileSync("./key.pem"),
+  cert: fs.readFileSync("./cert.pem"),
+};
+
+https.createServer(options, app).listen(port, () => {
+  console.log(`Server is running on https://localhost:${port}`);
 });
